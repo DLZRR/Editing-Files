@@ -9,7 +9,7 @@ filter_wavelengths = [3595, 4640, 6122, 6440, 16620, 35075, 44366, 56281, 75892,
 
 SDSS = scipy.io.readsav('MULTIWAVE_allfluxes_final.sav')
 
-threshold = 10000
+threshold = 100
 #print SDSS['fr'][0]
 #print SDSS.keys()
 
@@ -19,7 +19,16 @@ key_names = ['fu', 'dfu', 'fg', 'dfg', 'fr', 'dfr', 'fh', 'dfh', 'f3', 'df3', 'f
 
 array = np.zeros((len(SDSS['fg'])+1, len(key_names)+2))
 
+print SDSS['fu'][0]
 
+#SDSS['fu'] *= 1e-3
+#SDSS['dfu'] *= 1e-3
+#SDSS['fg'] *= 1e-3
+#SDSS['dfg'] *= 1e-3
+#SDSS['fr'] *= 1e-3
+#SDSS['dfr'] *= 1e-3
+#SDSS['fh'] *= 1e-3
+#SDSS['dfh'] *= 1e-3 
 SDSS['f3'] *= 1e-3
 SDSS['df3'] *= 1e-3
 SDSS['f4'] *= 1e-3
@@ -38,8 +47,43 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
     #print SDSS['mips'][i]
     #print
 
-    for j in range(2, len(key_names) + 2, 2):
+    for j in range(2, 10, 2):
 
+        #print j
+
+        #print SDSS[key_names[j-2]][i]
+        
+        
+        if SDSS[key_names[j-2]][i] == 0.:
+
+            array[i+1][j] = -99.
+            array[i+1][j+1] = -99.
+
+        elif SDSS[key_names[j-2]][i] > threshold:
+
+            array[i+1][j] = -99.
+            array[i+1][j+1] = -99.
+
+            
+        elif SDSS[key_names[j-2]][i] < 1.e-9:
+            
+            array[i+1][j] = -99.
+            array[i+1][j+1] = -99.
+
+        else:
+
+            array[i+1][j] = SDSS[key_names[j-2]][i] 
+            array[i+1][j+1] = SDSS[key_names[j-2]][i]/10.
+            
+            #array[i+1][8]
+
+            #print array[i+1][j]
+
+    print array[i+1][j]
+
+    for j in range(10, len(key_names) + 2, 2):
+
+        #print j
 
         if SDSS[key_names[j-2]][i] == 0. and SDSS[key_names[j-1]][i] == 0.:
 
@@ -51,7 +95,7 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
             array[i+1][j] = -99.
             array[i+1][j+1] = -99.
 
-        elif SDSS[key_names[j-1]][i] > threshold and SDSS[key_names[j-2]][i] == 0.:
+        elif SDSS[key_names[j-2]][i] > threshold and SDSS[key_names[j-1]][i] == 0.:
 
             array[i+1][j] = -99.
             array[i+1][j+1] = -99.
@@ -61,7 +105,7 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
             array[i+1][j] = SDSS[key_names[j-1]][i]
             array[i+1][j+1] = SDSS[key_names[j-1]][i] / 10.
             
-        elif SDSS[key_names[j-1]][i] < 1.e-8 and SDSS[key_names[j-2]][i] < 1.e-9:
+        elif SDSS[key_names[j-2]][i] < 1.e-8 and SDSS[key_names[j-1]][i] < 1.e-9:
             
             array[i+1][j] = -99.
             array[i+1][j+1] = -99.
@@ -71,8 +115,9 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
             array[i+1][j] = SDSS[key_names[j-2]][i] 
             array[i+1][j+1] = SDSS[key_names[j-1]][i]
             
+    
 
-print array[1]
+print array[2]
 print(len(key_names)+2)
 print(np.arange(2,32,2).tolist())
 
