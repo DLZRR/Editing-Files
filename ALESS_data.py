@@ -40,6 +40,7 @@ for i in range(len(var)):
                 array[i+1][1] = np.random.randint(1,5) # I should remove the source ideally, but I can print the source names later. Not ideal though
                 #print(array[i+1][0])
                 no_redshift.append(i+1)
+                print(array[i+1][0])
             
             else:
 
@@ -198,6 +199,8 @@ for i in range(len(var)):
     
 #    print array[len(var)-3][i], " i is ", i
 
+print(len(no_redshift))
+#print(array[i for i in no_redshift][0])
 tp = tuple(no_redshift)
 array = np.delete(array, tp, axis=0)
 

@@ -12,7 +12,7 @@ infrarednew = np.loadtxt('infraredgoodssouthnew.txt', usecols=[0,2,3,4,5,6,7,8,9
 array = np.zeros((len(optical)+1, len(optical[0])+len(infrared[0])-1))
 
 
-
+ks = 0
 
 for i in range(len(optical)):
 
@@ -28,10 +28,29 @@ for i in range(len(optical)):
             for s in range(2, len(optical[0]), 2):
     
                 array[i+1][s] = optical[i][s]
-                array[i+1][s+1] = optical[i][s]/10.
+                array[i+1][s+1] = optical[i][s+1]
                 
                 #array[i+1][s] = -99.
                 #print(s)
+                
+                
+                
+                #if array[i+1][s] > -99. and array[i+1][s] < 1.e-7:
+            
+                    #print(optical[i][0])
+                    #print(optical[i][s])
+                    #print(optical[i][s+1])
+                    
+                    #print(s)
+                    
+                    #array[i+1][s] = -99.
+                    #array[i+1][s+1] = -99.
+                    
+                    #ks += 1
+                    
+                if array[i+1][s+1]/array[i+1][s] < 0.1:
+                
+                    array[i+1][s+1] = array[i+1][s] / 10.
 
             #print('Max s is:', len(optical[0]))
 
@@ -61,6 +80,10 @@ for i in range(len(optical)):
                     
                     array[i+1][t+len(optical[0])] = infrared[j][t]/10.
                     
+                #if array[i+1][t+len(optical[0])-1] > 1000. or array[i+1][t+len(optical[0])-1] < 1.e-7:
+            
+                    #print(array[i+1][t+len(optical[0])-1])
+                    
                 #print t
                 #print len(infrared[0])-12
                 #print(infrared[0][t])
@@ -87,6 +110,10 @@ for i in range(len(optical)):
                     if infrared[j][x+1]/infrared[j][x] < 0.1:
                         
                         array[i+1][x+len(optical[0])] = infrared[j][x] * 1.e3 / 10.
+                        
+                #if array[i+1][x+len(optical[0])-1] > 1000. or array[i+1][x+len(optical[0])-1] < 1.e-7:
+            
+                    #print(array[i+1][t+len(optical[0])-1])
                 
             if array[i+1][len(optical[0])-1+len(infrared[0])-14] > 0. and array[i+1][len(optical[0])-1+len(infrared[0])-12] > 0.:
                 
@@ -97,13 +124,21 @@ for i in range(len(optical)):
                 #print array[i+1][len(optical[0])-1+len(infrared[0])-12]
                 #print array[i+1][len(optical[0])-1+len(infrared[0])-13]
                 
-                x = gvar.gvar(array[i+1][len(optical[0])-1+len(infrared[0])-14], array[i+1][len(optical[0])-1+len(infrared[0])-14+1] )
-                y = gvar.gvar(array[i+1][len(optical[0])-1+len(infrared[0])-14+2], array[i+1][len(optical[0])-1+len(infrared[0])-14+3] )
+                #x = gvar.gvar(array[i+1][len(optical[0])-1+len(infrared[0])-14], array[i+1][len(optical[0])-1+len(infrared[0])-14+1] )
+                #y = gvar.gvar(array[i+1][len(optical[0])-1+len(infrared[0])-14+2], array[i+1][len(optical[0])-1+len(infrared[0])-14+3] )
 
-                z = (x + y) / 2.
+                #z = (x + y) / 2.
+                
+                mean = (array[i+1][len(optical[0])-1+len(infrared[0])-14+2] + array[i+1][len(optical[0])-1+len(infrared[0])-14]) / 2.
 
-                array[i+1][len(optical[0])-1+len(infrared[0])-14] = z.mean
-                array[i+1][len(optical[0])-1+len(infrared[0])-14+1] = z.sdev
+                array[i+1][len(optical[0])-1+len(infrared[0])-14+1] = max(abs(array[i+1][len(optical[0])-1+len(infrared[0])-14]+array[i+1][len(optical[0])-1+len(infrared[0])-14+1]-mean), abs(mean-array[i+1][len(optical[0])-1+len(infrared[0])-14+2] - array[i+1][len(optical[0])-1+len(infrared[0])-14+3]))
+
+                array[i+1][len(optical[0])-1+len(infrared[0])-14] = mean
+                
+                
+                if array[i+1][len(optical[0])-1+len(infrared[0])-14+1]/array[i+1][len(optical[0])-1+len(infrared[0])-14] < 0.1:
+                
+                    array[i+1][len(optical[0])-1+len(infrared[0])-14+1] = array[i+1][len(optical[0])-1+len(infrared[0])-14] / 10.
                 
                 #array[i+1][len(optical[0])-1+len(infrared[0])-14] = (array[i+1][len(optical[0])-1+len(infrared[0])-14] + array[i+1][len(optical[0])-1+len(infrared[0])-14+2]) / 2.
                 #array[i+1][len(optical[0])-1+len(infrared[0])-14+1] = array[i+1][len(optical[0])-1+len(infrared[0])-14] / 8.
@@ -116,15 +151,16 @@ for i in range(len(optical)):
                 #print len(infrared[0])-12
 
             #print(infrared[j][x+1])
-            for x in range(2, len(infrared[0]), 1):
+            #for x in range(2, len(infrared[0]), 1):
         
-                if array[i+1][x] > 1000. or array[i+1][x] < 1.e-7:
+             #   if array[i+1][x] > -99. and array[i+1][x] < 1.e-7:
             
-                    print(array[i+1][x])
-                    array[i+1][x] = -99.
-                    print(array[i+1][x])
+              #      print(array[i+1][x])
+               #     array[i+1][x] = -99.
+                    #print(array[i+1][x])
 
 print(array[1])
+print(ks)
 #print(len(array[1]))
 #print(np.arange(2, 54, 2).tolist())
 #print(np.arange(3, 54, 2).tolist())
