@@ -116,6 +116,13 @@ for i in range(len(optical)):
                 #print len(infrared[0])-12
 
             #print(infrared[j][x+1])
+            for x in range(2, len(infrared[0]), 1):
+        
+                if array[i+1][x] > 1000. or array[i+1][x] < 1.e-7:
+            
+                    print(array[i+1][x])
+                    array[i+1][x] = -99.
+                    print(array[i+1][x])
 
 print(array[1])
 #print(len(array[1]))

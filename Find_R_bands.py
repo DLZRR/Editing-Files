@@ -19,7 +19,7 @@ key_names = ['fu', 'dfu', 'fg', 'dfg', 'fr', 'dfr', 'fh', 'dfh', 'f3', 'df3', 'f
 
 array = np.zeros((len(SDSS['fg'])+1, len(key_names)+2))
 
-print SDSS['fu'][0]
+#print SDSS['fu'][0]
 
 #SDSS['fu'] *= 1e-3
 #SDSS['dfu'] *= 1e-3
@@ -79,7 +79,7 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
 
             #print array[i+1][j]
 
-    print array[i+1][j]
+    #print array[i+1][j]
 
     for j in range(10, len(key_names) + 2, 2):
 
@@ -115,9 +115,19 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
             array[i+1][j] = SDSS[key_names[j-2]][i] 
             array[i+1][j+1] = SDSS[key_names[j-1]][i]
             
-    
+            if SDSS[key_names[j-1]][i]/SDSS[key_names[j-2]][i] < 0.1:
+            
+                array[i+1][j+1] = SDSS[key_names[j-2]][i]/10.
+            
+    for x in range(2, len(key_names) + 2, 2):
+        
+                if array[i+1][x] > 1000. or array[i+1][x] < 1.e-7:
+            
+                    print(array[i+1][x+1])
+                    #array[i+1][x] = -99.
+                    #print(array[i+1][x])   
 
-print array[2]
+print(array[2])
 print(len(key_names)+2)
 print(np.arange(2,32,2).tolist())
 

@@ -22,6 +22,7 @@ wavelengths = [3675.1, 3429, 3647, 4589, 5377, 6504, 8635, 9502.7, 12275.1, 1230
 var = hdul[1].data
 #print var[1][-2]
 
+no_redshift = []
 
 array = np.zeros((len(var) + 1, len(wavelengths) * 2 + 2))
 
@@ -37,6 +38,8 @@ for i in range(len(var)):
             if var[i][54] < 0. or var[i][54] == 99.:
 
                 array[i+1][1] = np.random.randint(1,5) # I should remove the source ideally, but I can print the source names later. Not ideal though
+                #print(array[i+1][0])
+                no_redshift.append(i+1)
             
             else:
 
@@ -59,7 +62,7 @@ for i in range(len(var)):
             array[i+1][j] = -99.
             array[i+1][j+1] = -99.
 
-        elif var[i][columns_to_use[t]] > 100. and var[i][columns_to_use[t+19]] == 0.:
+        elif var[i][columns_to_use[t]] > 100.:
 
             array[i+1][j] = -99.
             array[i+1][j+1] = -99.
@@ -81,12 +84,25 @@ for i in range(len(var)):
             array[i+1][j] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5)
             array[i+1][j+1] = var[i][columns_to_use[t + 19]] * 3631./2.5 * np.log(10.) * 10.**(-var[i][columns_to_use[t]]/2.5)
             
+            if array[i+1][j] == 0. or array[i+1][j]>1.:
+            
+                print(var[i][columns_to_use[t]])
+                print(array[i+1][j+1])
+                
+            if array[i+1][j+1]/array[i+1][j] < 0.1:
+            
+                array[i+1][j+1] = array[i+1][j]/10.
+                
+        #if array[i+1][j] > -98. and array[i+1][j] < 1.e-7:
+            
+        #            print(array[i+1][j])
+        #            print(array[i+1][j+1])
             # It may very well be possible that they are in micro Jansky, I will try that here. Not true, quite sure it is magnitude AB
             
             #array[i+1][j] = var[i][columns_to_use[t]] * 1.e-6
             #array[i+1][j+1] = var[i][columns_to_use[t + 19]] * 1.e-6
-
-
+ 
+        
         #array[i+1][j+2] = wavelengths[t]
 
         t += 1
@@ -99,7 +115,7 @@ for i in range(len(var)):
 
     x = 0
     
-    for s in range(2 * (len(wavelengths) - 8) + 2, 2 * len(wavelengths) + 2 , 2):
+    for s in range(2 * (len(wavelengths) - 8) + 2, 2 * len(wavelengths) + 2, 2):
         
         if np.isnan(var[i][columns_to_use2[t]]) or (var[i][columns_to_use2[t]] == 0. and var[i][columns_to_use2[t + 1]] == 0.):
         
@@ -163,6 +179,14 @@ for i in range(len(var)):
 
         #print 's is', s
 
+    for x in range(2 * (len(wavelengths) - 8) + 2, 2 * len(wavelengths) + 2, 1):
+        
+                if array[i+1][x] > -98. and array[i+1][x] < 1.e-7:
+            
+                    #print(array[i+1][x])
+                    print(1)
+                    #array[i+1][x] = -99.
+                    #print(array[i+1][x])  
 
 #print(array[1])
 #print(array[6])
@@ -173,5 +197,10 @@ for i in range(len(var)):
 #for i in range(0, 2*len(wavelengths), 1):
     
 #    print array[len(var)-3][i], " i is ", i
+
+tp = tuple(no_redshift)
+array = np.delete(array, tp, axis=0)
+
+    
 
 np.savetxt('ALESS_TRUE_DATA.txt', array)
