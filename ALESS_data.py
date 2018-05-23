@@ -204,6 +204,6 @@ print(len(no_redshift))
 tp = tuple(no_redshift)
 array = np.delete(array, tp, axis=0)
 
-    
+headerALESS = 'ID z VIMOS_U VIMOS_U_error SDSS_U SDSS_U_error MUSYC_U38 MUSYC_U38_error MUSYC_B MUSYC_B_error MUSYC_V MUSYC_V_error MUSYC_R MUSYC_R_error MUSYC_I MUSYC_I_error MUSYC_Z MUSYC_Z_error MUSYC_J MUSYC_J_error HAWK_J HAWK_J_error TENIS_J TENIS_J_error MUSYC_H MUSYC_H_error MUSYC_K MUSYC_K_error HAWK_K HAWK_K_error TENIS_K TENIS_K_error IRAC1 IRAC1_error IRAC2 IRAC2_error IRAC3 IRAC3_error IRAC4 IRAC4_error MIPS24 MIPS24_error MIPS70 MIPS70_error PACS100 PACS100_error PACS160 PACS160_error SPIRE250 SPIRE250_error SPIRE350 SPIRE350_error SPIRE500 SPIRE500_error La_Boca_870 La_Boca_870_error'
 
-np.savetxt('ALESS_TRUE_DATA.txt', array)
+np.savetxt('ALESS_TRUE_DATA.txt', array, header=headerALESS, comments='')
