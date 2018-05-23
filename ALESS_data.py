@@ -24,11 +24,11 @@ var = hdul[1].data
 
 no_redshift = []
 
-array = np.zeros((len(var) + 1, len(wavelengths) * 2 + 2))
+array = np.zeros((len(var), len(wavelengths) * 2 + 2))
 
 for i in range(len(var)):
 
-    array[i+1][0] = float(var[i][0][5:]) # This is the ALESS id
+    array[i][0] = float(var[i][0][5:]) # This is the ALESS id
 
     
     if var[i][-2] < 0. or var[i][-2] == 99.:
@@ -37,22 +37,22 @@ for i in range(len(var)):
 
             if var[i][54] < 0. or var[i][54] == 99.:
 
-                array[i+1][1] = np.random.randint(1,5) # I should remove the source ideally, but I can print the source names later. Not ideal though
+                array[i][1] = np.random.randint(1,5) # I should remove the source ideally, but I can print the source names later. Not ideal though
                 #print(array[i+1][0])
-                no_redshift.append(i+1)
-                print(array[i+1][0])
+                no_redshift.append(i)
+                print(array[i][0])
             
             else:
 
-                array[i+1][1] = var[i][54]
+                array[i][1] = var[i][54]
 
         else:
     
-            array[i+1][1] = var[i][53]
+            array[i][1] = var[i][53]
 
     else:
 
-        array[i+1][1] = var[i][-2]
+        array[i][1] = var[i][-2]
     
     t = 0
 
@@ -60,39 +60,39 @@ for i in range(len(var)):
 
         if np.isnan(var[i][columns_to_use[t]]) or var[i][columns_to_use[t]] == 0.:
             
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif var[i][columns_to_use[t]] > 100.:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif var[i][columns_to_use[t]] == -99.:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
             
         elif var[i][columns_to_use[t+19]] == 0.:
             
-            array[i+1][j] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5)
-            array[i+1][j+1] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5) / 10.
+            array[i][j] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5)
+            array[i][j+1] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5) / 10.
 
         else:
 
             # The conversion from magnitude AB to flux in Jansky
 
-            array[i+1][j] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5)
-            array[i+1][j+1] = var[i][columns_to_use[t + 19]] * 3631./2.5 * np.log(10.) * 10.**(-var[i][columns_to_use[t]]/2.5)
+            array[i][j] = 3631. * 10.**(-var[i][columns_to_use[t]]/2.5)
+            array[i][j+1] = var[i][columns_to_use[t + 19]] * 3631./2.5 * np.log(10.) * 10.**(-var[i][columns_to_use[t]]/2.5)
             
-            if array[i+1][j] == 0. or array[i+1][j]>1.:
+            if array[i][j] == 0. or array[i][j]>1.:
             
                 print(var[i][columns_to_use[t]])
-                print(array[i+1][j+1])
+                print(array[i][j+1])
                 
-            if array[i+1][j+1]/array[i+1][j] < 0.1:
+            if array[i][j+1]/array[i][j] < 0.1:
             
-                array[i+1][j+1] = array[i+1][j]/10.
+                array[i][j+1] = array[i][j]/10.
                 
         #if array[i+1][j] > -98. and array[i+1][j] < 1.e-7:
             
@@ -120,23 +120,23 @@ for i in range(len(var)):
         
         if np.isnan(var[i][columns_to_use2[t]]) or (var[i][columns_to_use2[t]] == 0. and var[i][columns_to_use2[t + 1]] == 0.):
         
-            array[i+1][s] = -99.
-            array[i+1][s+1] = -99.
+            array[i][s] = -99.
+            array[i][s+1] = -99.
             
         elif np.isnan(var[i][columns_to_use2[t+1]]):
             
-            array[i+1][s] = var[i][columns_to_use2[t]] * 1.e-3
-            array[i+1][s+1] = var[i][columns_to_use2[t]] * 1.e-4
+            array[i][s] = var[i][columns_to_use2[t]] * 1.e-3
+            array[i][s+1] = var[i][columns_to_use2[t]] * 1.e-4
 
         elif var[i][columns_to_use2[t]] == -99.:
 
-            array[i+1][s] = -99.
-            array[i+1][s+1] = -99.
+            array[i][s] = -99.
+            array[i][s+1] = -99.
 
         else:
 
-            array[i+1][s] = var[i][columns_to_use2[t]] * 1.e-3
-            array[i+1][s+1] = var[i][columns_to_use2[t+1]] * 1.e-3 
+            array[i][s] = var[i][columns_to_use2[t]] * 1.e-3
+            array[i][s+1] = var[i][columns_to_use2[t+1]] * 1.e-3 
 
             '''
             if x + len(wavelengths) - 8 == 23 or x + len(wavelengths) - 8 == 24 or x + len(wavelengths) - 8 == 25 or x + len(wavelengths) - 8 == 26:
@@ -168,9 +168,9 @@ for i in range(len(var)):
 
         #print t
         
-        if array[i+1][s+1]/array[i+1][s] < 0.1:
+        if array[i][s+1]/array[i][s] < 0.1:
             
-            array[i+1][s+1] = array[i+1][s] / 10.
+            array[i][s+1] = array[i][s] / 10.
         
         
         x += 1
@@ -182,7 +182,7 @@ for i in range(len(var)):
 
     for x in range(2 * (len(wavelengths) - 8) + 2, 2 * len(wavelengths) + 2, 1):
         
-                if array[i+1][x] > -98. and array[i+1][x] < 1.e-7:
+                if array[i][x] > -98. and array[i][x] < 1.e-7:
             
                     #print(array[i+1][x])
                     print(1)

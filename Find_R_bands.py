@@ -17,7 +17,7 @@ threshold = 100
 
 key_names = ['fu', 'dfu', 'fg', 'dfg', 'fr', 'dfr', 'fh', 'dfh', 'f3', 'df3', 'f4', 'df4', 'f5', 'df5', 'f8', 'df8', 'f24', 'df24', 'f70', 'df70', 'f160', 'df160', 'f250', 'df250', 'f350', 'df350', 'f500', 'df500', 'smam', 'dsmam'] # Have not added h band yet drmag does not actually exist, just to make sure program does not whine about this
 
-array = np.zeros((len(SDSS['fg'])+1, len(key_names)+2))
+array = np.zeros((len(SDSS['fg']), len(key_names)+2))
 
 #print SDSS['fu'][0]
 
@@ -41,9 +41,9 @@ SDSS['df8'] *= 1e-3
 
 for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
 
-    array[i+1][0] = SDSS['mips'][i]
+    array[i][0] = SDSS['mips'][i]
     
-    array[i+1][1] = SDSS['zs'][i]
+    array[i][1] = SDSS['zs'][i]
     #print SDSS['mips'][i]
     #print
 
@@ -56,24 +56,24 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
         
         if SDSS[key_names[j-2]][i] == 0.:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif SDSS[key_names[j-2]][i] > threshold:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
             
         elif SDSS[key_names[j-2]][i] < 1.e-9:
             
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         else:
 
-            array[i+1][j] = SDSS[key_names[j-2]][i] 
-            array[i+1][j+1] = SDSS[key_names[j-2]][i]/10.
+            array[i][j] = SDSS[key_names[j-2]][i] 
+            array[i][j+1] = SDSS[key_names[j-2]][i]/10.
             
             #array[i+1][8]
 
@@ -87,43 +87,43 @@ for i in range(0, len(SDSS['fg']), 1): #len(SDSS['fg'])
 
         if SDSS[key_names[j-2]][i] == 0. and SDSS[key_names[j-1]][i] == 0.:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif SDSS[key_names[j-1]][i] > threshold and SDSS[key_names[j-2]][i] > threshold:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif SDSS[key_names[j-2]][i] > threshold and SDSS[key_names[j-1]][i] == 0.:
 
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         elif SDSS[key_names[j-1]][i] > threshold:
 
-            array[i+1][j] = SDSS[key_names[j-1]][i]
-            array[i+1][j+1] = SDSS[key_names[j-1]][i] / 10.
+            array[i][j] = SDSS[key_names[j-1]][i]
+            array[i][j+1] = SDSS[key_names[j-1]][i] / 10.
             
         elif SDSS[key_names[j-2]][i] < 1.e-8 and SDSS[key_names[j-1]][i] < 1.e-9:
             
-            array[i+1][j] = -99.
-            array[i+1][j+1] = -99.
+            array[i][j] = -99.
+            array[i][j+1] = -99.
 
         else:
 
-            array[i+1][j] = SDSS[key_names[j-2]][i] 
-            array[i+1][j+1] = SDSS[key_names[j-1]][i]
+            array[i][j] = SDSS[key_names[j-2]][i] 
+            array[i][j+1] = SDSS[key_names[j-1]][i]
             
             if SDSS[key_names[j-1]][i]/SDSS[key_names[j-2]][i] < 0.1:
             
-                array[i+1][j+1] = SDSS[key_names[j-2]][i]/10.
+                array[i][j+1] = SDSS[key_names[j-2]][i]/10.
             
     for x in range(2, len(key_names) + 2, 2):
         
-                if array[i+1][x] > 1000. or array[i+1][x] < 1.e-7:
+                if array[i][x] > 1000. or array[i][x] < 1.e-7:
             
-                    print(array[i+1][x+1])
+                    print(array[i][x+1])
                     #array[i+1][x] = -99.
                     #print(array[i+1][x])   
 
