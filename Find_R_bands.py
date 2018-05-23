@@ -131,5 +131,7 @@ print(array[2])
 print(len(key_names)+2)
 print(np.arange(2,32,2).tolist())
 
-np.savetxt('something_new_new.txt', array)
+headerxFLS = 'ID z SDSS_U SDSS_U_error SDSS_g SDSS_g_error SDSS_r SDSS_r_error 2_mass_H 2_mass_H_error IRAC1 IRAC1_error IRAC2 IRAC2_error IRAC3 IRAC3_error IRAC4 IRAC4_error MIPS24 MIPS24_error MIPS70 MIPS70_error MIPS160 MIPS160_error SPIRE250 SPIRE250_error SPIRE350 SPIRE350_error SPIRE500 SPIRE500_error MAMBO MAMBO_error'
+
+np.savetxt('something_new_new.txt', array, header = headerxFLS, comments='')
 
