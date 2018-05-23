@@ -165,4 +165,6 @@ print(ks)
 #print(np.arange(2, 54, 2).tolist())
 #print(np.arange(3, 54, 2).tolist())
 
-np.savetxt('KIRKSGOODS_70.txt', array)
+headerGOODSSouth = 'ID z MUSYC_U38 MUSYC_U38_error VIMOS_U VIMOS_U_error HST_F435W HST_F435W_error HST_F606W HST_F606W_error HST_F775W HST_F775W_error HST_F814W HST_F814W_error HST_F850LP HST_F850LP_error HST_F098M HST_F098M_error HST_F105W HST_F105W_error HST_F125 HST_F125_error HST_F160W HST_F160W_error ISAAC_Ks ISAAC_Ks_error HAWKI_K HAWKI_K_error IRAC1 IRAC1_error IRAC2 IRAC2_error IRAC3 IRAC3_error IRAC4 IRAC4_error MIPS24 MIPS24_error MIPS70 MIPS70_error PACS70 PACS70_error PACS100 PACS100_error PACS160 PACS160_error SPIRE250 SPIRE250_error SPIRE350 SPIRE350_error SPIRE500 SPIRE500_error'
+
+np.savetxt('KIRKSGOODS_70.txt', array, header = headerGOODSSouth, comments='')
